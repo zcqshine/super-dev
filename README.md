@@ -632,11 +632,11 @@ Super Dev 2.3.3 架构由四层组成：**宿主接入层**（20 个统一接入
 
 ---
 
-## 20 个统一接入宿主 + 1 个手动插件宿主
+## 21 个统一接入宿主 + 1 个手动插件宿主
 
 正式产品口径：
 
-- `20` 个统一接入宿主
+- `21` 个统一接入宿主
 - `OpenClaw` 单独作为原生插件宿主，走 npm / plugin 安装，不走统一 `onboard`
 
 ### 统一 CLI 宿主（9 个）
@@ -650,6 +650,7 @@ Super Dev 2.3.3 架构由四层组成：**宿主接入层**（20 个统一接入
 | Kiro CLI | `/super-dev 需求` | `super-dev onboard --host kiro-cli` |
 | Cursor CLI | `/super-dev 需求` | `super-dev onboard --host cursor-cli` |
 | Qoder CLI | `/super-dev 需求` | `super-dev onboard --host qoder-cli` |
+| Qwen Code | `/super-dev 需求` | `super-dev onboard --host qwen-code` |
 | Copilot CLI | `super-dev: 需求` | `super-dev onboard --host copilot-cli` |
 | CodeBuddy CLI | `/super-dev 需求` | `super-dev onboard --host codebuddy-cli` |
 
@@ -662,6 +663,7 @@ Super Dev 2.3.3 架构由四层组成：**宿主接入层**（20 个统一接入
 | Windsurf | `/super-dev 需求` | `super-dev onboard --host windsurf` |
 | Kiro | `/super-dev 需求` | `super-dev onboard --host kiro` |
 | Qoder | `/super-dev 需求` | `super-dev onboard --host qoder` |
+| Qwen Code | `/super-dev 需求` | `super-dev onboard --host qwen-code` |
 | Trae | `super-dev: 需求` | `super-dev onboard --host trae` |
 | CodeBuddy | `/super-dev 需求` | `super-dev onboard --host codebuddy` |
 | Copilot (VS Code) | `super-dev: 需求` | `super-dev onboard --host vscode-copilot` |
@@ -1118,7 +1120,32 @@ super-dev: 你的需求
 3. 建议先用 `super-dev doctor --host cline` 做一次确认。
 4. 在同一个 Agent Chat 会话里完成整条流水线效果最佳。
 
-#### 21. OpenClaw（手动插件宿主）
+#### 21. Qwen Code
+
+安装：
+```bash
+super-dev onboard --host qwen-code --force --yes
+```
+
+触发位置：
+打开 Qwen Code 的 Agent Chat，在项目上下文内触发。
+
+触发命令：
+```text
+/super-dev 你的需求
+```
+
+接入后是否需要重启：否
+
+补充说明：
+1. Qwen Code 当前使用 `/super-dev 你的需求` 作为主触发方式。
+2. 接入会写入项目级 `.qwen/rules/super-dev.md`、`.qwen/commands/super-dev.md` 与 `.qwen/skills/super-dev-core/SKILL.md`。
+3. 用户级 `~/.qwen/skills/super-dev-core/SKILL.md` 会作为全局增强面一起安装。
+4. 完成接入后建议重开 Qwen Code 或至少新开一个 Agent Chat，使规则与命令在新会话里一起生效。
+5. 建议先用 `super-dev doctor --host qwen-code` 做一次确认。
+6. 在同一个 Agent Chat 会话里完成整条流水线效果最佳。
+
+#### 22. OpenClaw（手动插件宿主）
 
 OpenClaw 通过原生 Plugin SDK 集成，无需 `super-dev onboard`，直接安装 npm 插件即可。
 

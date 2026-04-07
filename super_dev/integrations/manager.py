@@ -114,6 +114,7 @@ class IntegrationManager(IntegrationManagerContentMixin):
         "kilo-code": "在 VS Code 的 Kilo Code 聊天面板中触发。",
         "kiro": "打开 Kiro IDE 的 Agent Chat 或 AI 面板，在项目上下文内触发。",
         "qoder": "打开 Qoder IDE 的 Agent Chat，在当前项目内触发。",
+        "qwen-code": "打开 Qwen Code 的 Agent Chat，在项目上下文内触发。",
         "trae": "打开 Trae Agent Chat，在当前项目上下文内直接触发。",
         "openclaw": "在 OpenClaw Agent 对话面板中，确保当前工作区为目标项目后触发。",
     }
@@ -299,6 +300,12 @@ class IntegrationManager(IntegrationManagerContentMixin):
         "openclaw": [
             "OpenClaw 触发前确认当前工作区就是目标项目，并确保 super-dev CLI 已安装在 PATH 中。",
         ],
+        "qwen-code": [
+            "Qwen Code 触发前确认当前 Agent Chat 绑定的是目标项目工作区。",
+            "官方接入面是项目级 `.qwen/rules/super-dev.md` + `.qwen/commands/super-dev.md` + `.qwen/skills/super-dev-core/SKILL.md`。",
+            "用户级 `~/.qwen/skills/super-dev-core/SKILL.md` 会作为全局增强面一起安装。",
+            "完成接入后建议重开 Qwen Code 或至少新开一个 Agent Chat，使规则与命令在新会话里一起生效。",
+        ],
     }
 
     TARGETS: dict[str, IntegrationTarget] = {
@@ -444,6 +451,15 @@ class IntegrationManager(IntegrationManagerContentMixin):
             description="OpenClaw Agent 平台原生插件集成",
             files=[".openclaw/rules/super-dev.md"],
         ),
+        "qwen-code": IntegrationTarget(
+            name="qwen-code",
+            description="Qwen Code IDE 规则 + 命令 + 技能注入",
+            files=[
+                ".qwen/rules/super-dev.md",
+                ".qwen/commands/super-dev.md",
+                ".qwen/skills/super-dev-core/SKILL.md",
+            ],
+        ),
     }
     SLASH_COMMAND_FILES: dict[str, str] = {
         "antigravity": ".gemini/commands/super-dev.md",
@@ -458,6 +474,7 @@ class IntegrationManager(IntegrationManagerContentMixin):
         "opencode": ".opencode/commands/super-dev.md",
         "qoder-cli": ".qoder/commands/super-dev.md",
         "qoder": ".qoder/commands/super-dev.md",
+        "qwen-code": ".qwen/commands/super-dev.md",
         "roo-code": ".roo/commands/super-dev.md",
         "cursor": ".cursor/commands/super-dev.md",
         "openclaw": ".openclaw/commands/super-dev.md",
@@ -566,6 +583,9 @@ class IntegrationManager(IntegrationManagerContentMixin):
         "openclaw": (
             "https://docs.openclaw.ai/plugins/building-plugins",
             "https://docs.openclaw.ai/tools/skills",
+        ),
+        "qwen-code": (
+            "https://qwenlm.github.io/qwen-code-docs/",
         ),
     }
     OFFICIAL_DOCS: dict[str, str] = {
@@ -735,6 +755,15 @@ class IntegrationManager(IntegrationManagerContentMixin):
                 "官方文档公开 .github/copilot-instructions.md 作为项目级指令",
                 "Copilot Chat 的 @workspace 指令会读取 copilot-instructions.md",
                 "Super Dev 已写入 .github/copilot-instructions.md，但不支持 Skill 和 slash",
+            ],
+        },
+        "qwen-code": {
+            "level": "compatible",
+            "reason": "Qwen Code 官方支持 rules、commands 与 skills 目录接入，当前按项目级规则 + 命令 + 技能组合面接入。",
+            "evidence": [
+                "官方文档公开 Qwen Code rules、commands 与 skills 目录机制",
+                "Super Dev 已提供 `.qwen/rules/` + `.qwen/commands/` + `.qwen/skills/` 接入路径",
+                "用户级 `~/.qwen/skills/` 作为全局增强面一起安装",
             ],
         },
     }
@@ -2098,6 +2127,10 @@ class IntegrationManager(IntegrationManagerContentMixin):
                 "mode": "official-skill",
                 "summary": "官方 Plugin SDK + Skills",
             },
+            "qwen-code": {
+                "mode": "official-rules",
+                "summary": "官方 rules + commands + skills",
+            },
         }
         return mapping.get(target, {"mode": "none", "summary": ""})
 
@@ -2351,6 +2384,17 @@ class IntegrationManager(IntegrationManagerContentMixin):
                 ],
                 "official_user_surfaces": [
                     "~/.openclaw/skills/super-dev-core/SKILL.md",
+                ],
+                "observed_compatibility_surfaces": [],
+            },
+            "qwen-code": {
+                "official_project_surfaces": [
+                    ".qwen/rules/super-dev.md",
+                    ".qwen/commands/super-dev.md",
+                    ".qwen/skills/super-dev-core/SKILL.md",
+                ],
+                "official_user_surfaces": [
+                    "~/.qwen/skills/super-dev-core/SKILL.md",
                 ],
                 "observed_compatibility_surfaces": [],
             },

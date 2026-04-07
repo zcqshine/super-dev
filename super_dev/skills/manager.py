@@ -53,6 +53,7 @@ class SkillManager:
         "opencode": "~/.config/opencode/skills",
         "qoder-cli": "~/.qoder/skills",
         "qoder": "~/.qoder/skills",
+        "qwen-code": "~/.qwen/skills",
         "roo-code": "~/.roo/skills",
         "windsurf": "~/.codeium/windsurf/skills",
     }

@@ -144,6 +144,7 @@ HOST_TOOL_CATALOG: list[dict[str, str]] = [
     {"id": "kiro-cli", "name": "Kiro CLI"},
     {"id": "opencode", "name": "OpenCode"},
     {"id": "qoder-cli", "name": "Qoder CLI"},
+    {"id": "qwen-code", "name": "Qwen Code"},
     {"id": "roo-code", "name": "Roo Code"},
     {"id": "vscode-copilot", "name": "GitHub Copilot"},
     {"id": "cursor", "name": "Cursor"},
@@ -162,6 +163,7 @@ HOST_TOOL_ALIASES: dict[str, list[str]] = {
     "cursor-cli": ["cursor-agent"],
     "gemini-cli": ["gemini"],
     "opencode": ["open-code"],
+    "qwen-code": ["qwen", "qwencode"],
     "vscode-copilot": ["copilot-chat", "vscode"],
 }
 
@@ -183,6 +185,7 @@ PRIMARY_IDE_HOST_TOOL_IDS: tuple[str, ...] = (
     "windsurf",
     "kiro",
     "qoder",
+    "qwen-code",
     "codebuddy",
     "trae",
     "vscode-copilot",
@@ -481,6 +484,20 @@ HOST_RUNTIME_VALIDATION_OVERRIDES: dict[str, dict[str, list[str]]] = {
             "Windsurf 恢复时要确认 Agent Chat / Workflow 已重新加载当前项目的 rules、workflow 与 skills。",
         ],
     },
+    "qwen-code": {
+        "runtime_checklist": [
+            "确认当前 Qwen Code Agent Chat 绑定的是目标项目工作区，而不是其他工作区。",
+            "确认 `.qwen/rules/`、`.qwen/commands/` 与 `.qwen/skills/` 已在当前会话真实加载。",
+            "确认 `/super-dev` 后直接进入 Super Dev 流水线，而不是普通聊天。",
+            "确认用户持续修改文档或 UI 时，Qwen Code 仍然留在当前 Super Dev 流程内。",
+        ],
+        "pass_criteria": [
+            "Qwen Code 在目标工作区真实读取了 rules、commands 与 skills。",
+        ],
+        "resume_checklist": [
+            "Qwen Code 恢复时要确认 Agent Chat 仍在目标项目，并继续当前确认门。",
+        ],
+    },
 }
 
 
@@ -502,6 +519,7 @@ HOST_COMMAND_CANDIDATES: dict[str, list[str]] = {
     "kiro-cli": ["kiro"],
     "opencode": ["opencode"],
     "qoder-cli": ["qoder", "qoder-cli"],
+    "qwen-code": ["qwen", "qwen-code"],
     "roo-code": ["roo", "roo-code"],
     "cursor": ["cursor"],
     "openclaw": ["openclaw", "openclaw-cli"],
@@ -580,6 +598,13 @@ HOST_PATH_PATTERNS: dict[str, list[str]] = {
         "%LOCALAPPDATA%/Programs/Qoder/Qoder.exe",
         "%PROGRAMFILES%/Qoder/Qoder.exe",
         "%PROGRAMFILES(X86)%/Qoder/Qoder.exe",
+    ],
+    "qwen-code": [
+        "~/Applications/Qwen Code.app",
+        "/Applications/Qwen Code.app",
+        "%LOCALAPPDATA%/Programs/Qwen Code/Qwen Code.exe",
+        "%PROGRAMFILES%/Qwen Code/Qwen Code.exe",
+        "%PROGRAMFILES(X86)%/Qwen Code/Qwen Code.exe",
     ],
     "trae": [
         "~/Applications/Trae.app",
